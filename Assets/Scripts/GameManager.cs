@@ -8,10 +8,14 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     public GameObject square;
     public GameObject endPanel;
+
     public Text timeTxt;
     public Text nowScore;
+    public Text bestScore;
+
     float time = 0.0f;
 
+    string key = "bestScore";
     bool isPlay = true;
 
     private void Awake() {
@@ -43,6 +47,33 @@ public class GameManager : MonoBehaviour
         isPlay = false;
         Time.timeScale = 0.0f;
         nowScore.text = time.ToString("N2");
+
+        // 최고 점수가 있다면
+        if (PlayerPrefs.HasKey(key)) 
+        {
+            float best = PlayerPrefs.GetFloat(key);
+            
+
+            if (best < time) { // 최고 점수 < 현재 점수
+                // 현재 점수를 최고 점수에 저장한다.
+                PlayerPrefs.SetFloat(key, time);
+                // 현재 점수를 text로 보내서 띄운다
+                bestScore.text = time.ToString("N2");
+            }
+            else { // 최고 점수 > 현재 점수 
+                // 최고 점수를 text로 보내서 띄운다
+                bestScore.text = best.ToString("N2");
+            }
+        }
+
+        // 최고 점수가 없다면
+        else {
+            // 현재 점수를 저장한다.
+            PlayerPrefs.SetFloat(key, time);
+            // 현재 점수를 text로 보내서 띄운다다
+            bestScore.text = time.ToString("N2");
+        }
+
         endPanel.SetActive(true);
     }
 }
