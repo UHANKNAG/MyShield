@@ -13,6 +13,8 @@ public class GameManager : MonoBehaviour
     public Text nowScore;
     public Text bestScore;
 
+    public Animator anim;
+
     float time = 0.0f;
 
     string key = "bestScore";
@@ -45,7 +47,8 @@ public class GameManager : MonoBehaviour
 
     public void GameOver() {
         isPlay = false;
-        Time.timeScale = 0.0f;
+        anim.SetBool("isDie", true);
+        Invoke("TimeStop", 0.5f);   // delay 시키는 함수 timestop을 0.5f 뒤에
         nowScore.text = time.ToString("N2");
 
         // 최고 점수가 있다면
@@ -75,5 +78,9 @@ public class GameManager : MonoBehaviour
         }
 
         endPanel.SetActive(true);
+    }
+
+    void TimeStop() {
+        Time.timeScale = 0.0f;
     }
 }
